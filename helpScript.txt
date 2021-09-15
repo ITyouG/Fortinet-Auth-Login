@@ -1,0 +1,1 @@
+pyinstaller --onefile --icon=auth.ico --clean --noconsole auth.py
