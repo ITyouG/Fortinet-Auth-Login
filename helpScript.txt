@@ -1,1 +1,3 @@
 pyinstaller --onefile --icon=auth.ico --clean --noconsole auth.py
+
+pyinstaller --icon=auth.ico -F -c auth.py

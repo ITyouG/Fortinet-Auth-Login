@@ -24,16 +24,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# ver 1.0.1
 
 import time
 import requests
 from requests import post, head, Session, ConnectionError
 from os import path
+import sys
 
 
 googleUrl = "http://www.google.com/"
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36'}
-
+fgt_keepalive_url = "";
 
 class FirewallState:
     Fail, Login, BadAuth, Retry, Keepalive, Error = list(range(6))
@@ -62,7 +64,7 @@ def login_func(username, password):
 
             url_2 = 'http://192.168.201.6:1000/'
             res = post(url_2, headers=headers, data=payload, timeout=3)
-
+            global fgt_keepalive_url
             fgt_keepalive_url = res.url
             print(fgt_keepalive_url)
 
@@ -70,13 +72,15 @@ def login_func(username, password):
     except ConnectionError:
         print('ConnectionError - login_func. :(')
         return FirewallState.Fail
+    except:
+        print("UnexpectedError - login_func. :", sys.exc_info()[0])
+        return FirewallState.Fail
 
 
 def keepalive_func():
     print("do keepalive.")
     try:
-        url = "http://172.22.6.254:1000/keepalive?040106060a020104"
-        response = requests.request("GET", url)
+        response = requests.request("GET", fgt_keepalive_url)
         if response.status_code == 200:
             print('Already keepalive. :)')
             return FirewallState.Keepalive
@@ -84,28 +88,34 @@ def keepalive_func():
     except ConnectionError:
         print('ConnectionError - keepalive_func. :(')
         return FirewallState.Fail
+    except:
+        print("UnexpectedError - login_func. :", sys.exc_info()[0])
+        return FirewallState.Fail
 
 
 def main():
-    print("init auth.")
+    try:
+        print("init auth.")
 
-    # read authcred.
-    fn = path.expanduser('~/.helloauthcred')  # filename
-    with open(fn, 'r') as f:
-        (username, password) = [x.strip() for x in f]
+        # read authcred.
+        fn = path.expanduser('~/.helloauthcred')  # filename
+        with open(fn, 'r') as f:
+            (username, password) = [x.strip() for x in f]
 
-    state = FirewallState.Keepalive
+        state = FirewallState.Login
 
-    while True:
-        if state == FirewallState.Keepalive:
-            state = keepalive_func()
-            time.sleep(10)
-        else:
-            state = login_func(username, password)
-            time.sleep(10)
-
-        print("state:", state)
-
+        while True:
+            if state == FirewallState.Keepalive:
+                state = keepalive_func()
+                time.sleep(10)
+            else:
+                state = login_func(username, password)
+                time.sleep(10)
+            print("state:", state)
+    except:
+        print("UnexpectedError - main. :", sys.exc_info()[0])
+        main()
+ 
 
 if __name__ == "__main__":
     main()
