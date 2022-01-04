@@ -6,7 +6,7 @@ Fortinet automatic login program written in python, used to bypass Fortinet fire
 
 
 # Installation & Used
-##### 1. Go to [link](https://github.com/ITyouG/Fortinet-Auth-Login/releases/download/v1.0.0/fortinet-auth-login_v1.0.0.zip) get installation package.
+##### 1. Go to [link](https://github.com/ITyouG/Fortinet-Auth-Login/releases/download/v1.0.1/fortinet-auth-login_v1.0.1.rar) get installation package.
 
 ##### 2. Double click "auth-install.bat" install batch.
 ![](/screenshots/install_package.jpg)
@@ -18,4 +18,4 @@ Fortinet automatic login program written in python, used to bypass Fortinet fire
 ![](/screenshots/run_in_bg.jpg)
 
 # Installation Package
-Download [link](https://github.com/ITyouG/Fortinet-Auth-Login/releases/download/v1.0.0/fortinet-auth-login_v1.0.0.zip)
+Download [link](https://github.com/ITyouG/Fortinet-Auth-Login/releases/download/v1.0.1/fortinet-auth-login_v1.0.1.rar)
